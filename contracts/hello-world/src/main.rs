@@ -3,9 +3,12 @@
 #[cfg(any(feature = "library", test))]
 extern crate alloc;
 
+mod errors;
+
 use ckb_std::ckb_constants::Source;
 use ckb_std::ckb_types::prelude::*;
 use ckb_std::high_level::{load_cell_data, load_cell_lock, load_script};
+use errors::Error;
 
 #[cfg(not(any(feature = "library", test)))]
 ckb_std::entry!(program_entry);
@@ -17,20 +20,6 @@ ckb_std::entry!(program_entry);
 // For more details, please refer to ckb-std's default_alloc macro
 // and the buddy-alloc alloc implementation.
 ckb_std::default_alloc!(16384, 1258306, 64);
-
-// Error codes for the contract
-#[repr(i8)]
-#[derive(Debug, Clone, Copy)]
-enum Error {
-    LoadScriptFailed = 1,
-    NoFunctionSelector = 2,
-    UnknownFunction = 3,
-    InvalidArgs = 4,
-    InsufficientBalance = 5,
-    Unauthorized = 6,
-    InvalidCellData = 7,
-    AmountMismatch = 8,
-}
 
 // Token data structure stored in cell data
 // Format: [amount: 8 bytes (u64)]
